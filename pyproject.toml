@@ -1,0 +1,29 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "tg-bot-meal-planning"
+version = "0.1.0"
+description = "Telegram бот для планирования питания и расчёта БЖУ/Ккал."
+authors = [{ name = "tg-bot-team", email = "example@example.com" }]
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "pytest>=8.3.0",
+]
+
+[project.urls]
+homepage = "https://github.com/example/tg-bot-meal-planning"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/tg_bot_meal_planning"]
+
+[tool.uv]
+# uv использует стандартный PEP 621; дополнительные опции будем добавлять по мере развития
+
+[tool.pytest.ini_options]
+pythonpath = ["src"]
+addopts = "-q"
+
+
