@@ -12,18 +12,12 @@
 ## Принципы разработки
 - Python + uv, подход TDD-first.
 - OOP + паттерны GoF/GRASP по необходимости.
-- Чистая архитектура: domain / application / infrastructure / interface.
-- Явные зависимости и валидация на границах.
-
-## Локальный старт
-- Требуется Python 3.14+.
-- Установите зависимости: `uv pip install -e .` (или используйте своё окружение).
-- Запускайте тесты: `python -m pytest`.
+- Чистая архитектура: domain / application / infrastructure / 
 
 ## Docker/Make
-- Создайте файл окружения: `make env` (копирует `infra/env.example` в `infra/.env`).
-- Соберите и запустите стек: `make build && make up` (Nginx на `http://localhost:8080`, приложение — заглушка на `http://localhost:8000`).
-- Тесты локально или в контейнере: `make test` или `make compose-test`.
+- Создайте файл окружения: `make env` в директории infra.
+- Соберите и запустите стек: `make build && make up`.
+- Тесты: `make test`.
 - Остановить стек: `make down`; логи приложения: `make logs`.
 
 ## CI

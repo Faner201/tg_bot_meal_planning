@@ -33,9 +33,6 @@ install:
 lint:
 	$(UV) run python -m compileall src tests
 
-test:
-	$(UV) run pytest
-
 run:
 	APP_PORT=$(APP_PORT) $(UV) run python -m http.server $(APP_PORT)
 
@@ -54,5 +51,5 @@ logs:
 shell: env
 	$(COMPOSE) run --rm app /bin/bash
 
-compose-test: env
+test: env
 	$(COMPOSE) run --rm app uv run pytest
