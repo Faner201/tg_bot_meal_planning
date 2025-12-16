@@ -38,10 +38,10 @@ package:
 
 
 lint:
-	$(DOCKER_APP) uv run ruff check .
+	$(DOCKER_APP) uv run --extra dev ruff check .
 
 type:
-	$(DOCKER_APP) uv run python -m ty check .
+	$(DOCKER_APP) uv run --extra dev python -m ty check .
 
 qa: lint type 
 
