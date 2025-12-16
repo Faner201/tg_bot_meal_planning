@@ -10,8 +10,8 @@ help:
 	@echo "Available targets:"
 	@echo "  install       Install dependencies with uv"
 	@echo "  package       Build wheel/sdist inside docker"
-	@echo "  lint          Ruff + black + isort"
-	@echo "  type          Run mypy type checks"
+	@echo "  lint          Ruff"
+	@echo "  type          Run ty type checks (python -m ty)"
 	@echo "  qa            lint + type"
 	@echo "  check         lint + type + test"
 	@echo "  test          Run pytest "
@@ -38,12 +38,10 @@ package:
 
 
 lint:
-	$(DOCKER_APP) uv run ruff check . --fix
-	$(DOCKER_APP) uv run black --check .
-	$(DOCKER_APP) uv run isort --check-only .
+	$(DOCKER_APP) uv run ruff check .
 
 type:
-	$(DOCKER_APP) uv run mypy .
+	$(DOCKER_APP) uv run python -m ty check .
 
 qa: lint type 
 
