@@ -7,21 +7,13 @@ services:
       dockerfile: Dockerfile
     env_file:
       - infra/.env
-    command: ["uv", "run", "python", "-m", "http.server", "${APP_PORT:-8000}"]
+    command: ["uv", "run", "python", "-m", "tg_bot_meal_planning.interface.telegram.run_bot"]
     environment:
-      APP_PORT: ${APP_PORT:-8000}
       DATABASE_PATH: ${DATABASE_PATH:-/app/var/sqlite/app.db}
     volumes:
       - ./:/app
       - sqlite_data:/app/var/sqlite
-    ports:
-      - "${APP_PORT:-8000}:${APP_PORT:-8000}"
-    healthcheck:
-      test: ["CMD-SHELL", "curl -f http://localhost:${APP_PORT:-8000} || exit 1"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
-      start_period: 10s
+    restart: unless-stopped
 
   nginx:
     image: nginx:1.27-alpine

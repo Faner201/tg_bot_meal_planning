@@ -10,3 +10,6 @@ class DomainService(Protocol[TInput, TOutput]):
     """Контракт доменного сервиса."""
 
     def execute(self: Self, data: TInput) -> TOutput: ...
+
+
+

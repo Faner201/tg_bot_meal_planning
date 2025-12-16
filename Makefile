@@ -3,6 +3,7 @@ DOCKER_APP ?= $(COMPOSE) run --rm app
 ENV_FILE ?= infra/.env
 ENV_EXAMPLE ?= infra/env.example
 APP_PORT ?= 8000
+UV ?= uv
 
 .PHONY: help install package lint type qa check test run build up down logs shell env compose-test
 
@@ -15,7 +16,7 @@ help:
 	@echo "  qa            lint + type"
 	@echo "  check         lint + type + test"
 	@echo "  test          Run pytest "
-	@echo "  run           Run dev HTTP server"
+	@echo "  run           Run bot in docker-compose (app service)"
 	@echo "  build         Build docker images"
 	@echo "  up            Start docker-compose stack"
 	@echo "  down          Stop docker-compose stack"
@@ -47,8 +48,8 @@ qa: lint type
 
 check: lint type test
 
-run:
-	APP_PORT=$(APP_PORT) $(UV) run python -m http.server $(APP_PORT)
+run: env
+	$(COMPOSE) up app
 
 build:
 	$(COMPOSE) build

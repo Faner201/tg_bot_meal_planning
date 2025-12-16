@@ -20,6 +20,6 @@ COPY tests ./tests
 
 RUN uv pip install --system -e .
 
-CMD ["uv", "run", "python", "-m", "http.server", "8000"]
+CMD ["uv", "run", "python", "-m", "tg_bot_meal_planning.interface.telegram.run_bot"]
 
 

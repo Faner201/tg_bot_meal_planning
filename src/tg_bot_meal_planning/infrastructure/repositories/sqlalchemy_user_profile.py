@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from tg_bot_meal_planning.application.repositories import UserProfileRepository
 from tg_bot_meal_planning.domain.user_profile import Gender, Goal, MacroTargets, UserProfile
@@ -10,9 +10,6 @@ if TYPE_CHECKING:
     from collections.abc import Callable
 
     from sqlalchemy.orm import Session
-else:  # pragma: no cover - только для аннотаций
-    Callable = Any
-    Session = Any
 
 
 class SqlAlchemyUserProfileRepository(UserProfileRepository):
@@ -78,3 +75,6 @@ class SqlAlchemyUserProfileRepository(UserProfileRepository):
             goal=Goal(model.goal),
             macro_targets=macro_targets,
         )
+
+
+

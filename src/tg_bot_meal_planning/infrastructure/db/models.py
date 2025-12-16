@@ -17,3 +17,6 @@ class UserProfileModel(Base):
     macro_protein_g: Mapped[float | None] = mapped_column(Float, nullable=True)
     macro_fat_g: Mapped[float | None] = mapped_column(Float, nullable=True)
     macro_carbs_g: Mapped[float | None] = mapped_column(Float, nullable=True)
+
+
+

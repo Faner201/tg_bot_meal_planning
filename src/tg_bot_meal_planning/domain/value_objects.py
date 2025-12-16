@@ -11,3 +11,6 @@ class ValueObject:
     def validate(self: Self) -> None:
         """Хук для валидации конкретных объектов."""
         return
+
+
+

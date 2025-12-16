@@ -12,3 +12,6 @@ class UserProfileRepository(Protocol):
     def get(self: Self, user_id: str) -> UserProfile | None: ...
 
     def save(self: Self, profile: UserProfile) -> None: ...
+
+
+

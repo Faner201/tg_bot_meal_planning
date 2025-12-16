@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, sessionmaker
@@ -12,9 +12,6 @@ from tg_bot_meal_planning.infrastructure.repositories.sqlalchemy_user_profile im
 if TYPE_CHECKING:
     from collections.abc import Callable
     from pathlib import Path
-else:  # pragma: no cover - только для аннотаций
-    Callable = Any
-    Path = Any
 
 
 def _make_repo(tmp_path: Path) -> tuple[SqlAlchemyUserProfileRepository, Callable[[], Session]]:
@@ -64,3 +61,6 @@ def test_save_updates_existing(tmp_path: Path) -> None:
     loaded = repo.get("u1")
 
     assert loaded == updated
+
+
+

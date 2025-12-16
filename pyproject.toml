@@ -6,17 +6,20 @@ build-backend = "hatchling.build"
 name = "tg-bot-meal-planning"
 version = "0.1.0"
 readme = "README.md"
-requires-python = ">=3.14"
+requires-python = ">=3.12,<3.14"
 dependencies = [
     "SQLAlchemy>=2.0.34",
     "alembic>=1.13.2",
     "pytest>=8.3.0",
+    "pytest-asyncio>=0.24.0",
+    "aiogram>=3.13.1",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pre-commit>=4.0.0",
     "ruff>=0.7.0",
+    "pytest-asyncio>=0.24.0",
     "ty==0.0.1a33",
 ]
 

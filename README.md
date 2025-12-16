@@ -20,5 +20,10 @@
 - Тесты: `make test`.
 - Остановить стек: `make down`; логи приложения: `make logs`.
 
+## Запуск Telegram-бота
+- Заполните `infra/.env` (см. `infra/env.example`), обязательно задайте `TELEGRAM_BOT_TOKEN`, опционально `DATABASE_PATH` (по умолчанию `var/sqlite/app.db`).
+- Через Docker: `make run` — запустит сервис `app` из `docker-compose` (бот `aiogram`, SQLite в томе `sqlite_data`).
+- Также можно поднять весь стек: `make build && make up`.
+
 ## CI
 Стартовый workflow устанавливает uv и выполняет pytest; по мере развития будут добавлены линтеры и типизация.

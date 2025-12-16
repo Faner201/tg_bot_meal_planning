@@ -38,3 +38,6 @@ def test_update_profile_returns_new_instance() -> None:
     assert updated.goal is Goal.LOSE_WEIGHT
     assert updated.height_cm == profile.height_cm
     assert updated.macro_targets == profile.macro_targets
+
+
+
