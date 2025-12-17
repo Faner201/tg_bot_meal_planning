@@ -1,23 +1,26 @@
-UV ?= uv
 COMPOSE ?= docker compose
+DOCKER_APP ?= $(COMPOSE) run --rm app
 ENV_FILE ?= infra/.env
 ENV_EXAMPLE ?= infra/env.example
 APP_PORT ?= 8000
 
-.PHONY: help install lint test run build up down logs shell env compose-test
+.PHONY: help install package lint type qa check test run build up down logs shell env compose-test
 
 help:
 	@echo "Available targets:"
 	@echo "  install       Install dependencies with uv"
-	@echo "  lint          Quick syntax check via compileall"
-	@echo "  test          Run pytest"
-	@echo "  run           Run dev HTTP server (http.server)"
+	@echo "  package       Build wheel/sdist inside docker"
+	@echo "  lint          Ruff + black + isort"
+	@echo "  type          Run mypy type checks"
+	@echo "  qa            lint + type"
+	@echo "  check         lint + type + test"
+	@echo "  test          Run pytest "
+	@echo "  run           Run dev HTTP server"
 	@echo "  build         Build docker images"
 	@echo "  up            Start docker-compose stack"
 	@echo "  down          Stop docker-compose stack"
 	@echo "  logs          Tail app logs from docker-compose"
 	@echo "  shell         Open bash in app container"
-	@echo "  compose-test  Run pytest inside the app container"
 
 env:
 	@if [ ! -f $(ENV_FILE) ]; then \
@@ -28,10 +31,23 @@ env:
 	fi
 
 install:
-	$(UV) pip install -e .
+	$(DOCKER_APP) uv pip install -e ".[dev]"
+
+package:
+	$(DOCKER_APP) uv build
+
 
 lint:
-	$(UV) run python -m compileall src tests
+	$(DOCKER_APP) uv run ruff check . --fix
+	$(DOCKER_APP) uv run black --check .
+	$(DOCKER_APP) uv run isort --check-only .
+
+type:
+	$(DOCKER_APP) uv run mypy .
+
+qa: lint type 
+
+check: lint type test
 
 run:
 	APP_PORT=$(APP_PORT) $(UV) run python -m http.server $(APP_PORT)
@@ -51,5 +67,5 @@ logs:
 shell: env
 	$(COMPOSE) run --rm app /bin/bash
 
-test: env
-	$(COMPOSE) run --rm app uv run pytest
+test:
+	$(DOCKER_APP) uv run pytest

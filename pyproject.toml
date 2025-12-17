@@ -11,6 +11,15 @@ dependencies = [
     "pytest>=8.3.0",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "black>=24.10.0",
+    "isort>=5.13.2",
+    "mypy>=1.13.0",
+    "pre-commit>=4.0.0",
+    "ruff>=0.7.0",
+]
+
 [tool.hatch.build.targets.wheel]
 packages = ["src/tg_bot_meal_planning"]
 
@@ -21,4 +30,37 @@ packages = ["src/tg_bot_meal_planning"]
 pythonpath = ["src"]
 addopts = "-q"
 
+[tool.black]
+line-length = 100
+target-version = ["py312"]
+
+[tool.isort]
+profile = "black"
+line_length = 100
+src_paths = ["src", "tests"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "W"]
+ignore = ["E203"]
+fixable = ["ALL"]
+unfixable = []
+
+[tool.ruff.format]
+docstring-code-format = true
+
+[tool.mypy]
+python_version = "3.12"
+warn_unused_configs = true
+disallow_untyped_defs = true
+disallow_incomplete_defs = true
+check_untyped_defs = true
+no_implicit_optional = true
+show_error_codes = true
+ignore_missing_imports = true
+mypy_path = ["src"]
+explicit_package_bases = true
 
