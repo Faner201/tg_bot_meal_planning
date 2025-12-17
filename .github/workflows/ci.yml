@@ -33,14 +33,8 @@ jobs:
       - name: Ruff
         run: uv run ruff check .
 
-      - name: Black
-        run: uv run black --check .
-
-      - name: isort
-        run: uv run isort --check-only .
-
-      - name: mypy
-        run: uv run mypy .
+      - name: Ty
+        run: uv run python -m ty check .
 
   tests:
     runs-on: ubuntu-latest
