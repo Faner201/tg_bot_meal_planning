@@ -19,3 +19,6 @@ class SyncUseCase[Input, Output]:
 
     def execute(self: Self, data: Input) -> Output:  # pragma: no cover - примеры переопределяются
         raise NotImplementedError
+
+
+

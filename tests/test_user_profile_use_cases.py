@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import pytest
 
 from tg_bot_meal_planning.application.errors import UseCaseError
@@ -11,15 +13,19 @@ from tg_bot_meal_planning.application.user_profile import (
     UpdateUserProfileInput,
 )
 from tg_bot_meal_planning.domain.user_profile import Gender, Goal, MacroTargets
-from tg_bot_meal_planning.infrastructure.repositories.user_profile import InMemoryUserProfileRepository
+
+if TYPE_CHECKING:
+    from tg_bot_meal_planning.infrastructure.repositories.sqlalchemy_user_profile import (
+        SqlAlchemyUserProfileRepository,
+    )
 
 
 @pytest.fixture
-def repository() -> InMemoryUserProfileRepository:
-    return InMemoryUserProfileRepository()
+def repository(user_profile_repo: SqlAlchemyUserProfileRepository) -> SqlAlchemyUserProfileRepository:
+    return user_profile_repo
 
 
-def test_register_creates_profile(repository: InMemoryUserProfileRepository) -> None:
+def test_register_creates_profile(repository: SqlAlchemyUserProfileRepository) -> None:
     use_case = RegisterUserProfile(repository)
     profile = use_case.execute(
         RegisterUserProfileInput(
@@ -36,7 +42,7 @@ def test_register_creates_profile(repository: InMemoryUserProfileRepository) -> 
     assert stored == profile
 
 
-def test_register_rejects_duplicate(repository: InMemoryUserProfileRepository) -> None:
+def test_register_rejects_duplicate(repository: SqlAlchemyUserProfileRepository) -> None:
     use_case = RegisterUserProfile(repository)
     use_case.execute(
         RegisterUserProfileInput(
@@ -60,7 +66,7 @@ def test_register_rejects_duplicate(repository: InMemoryUserProfileRepository) -
         )
 
 
-def test_update_changes_fields(repository: InMemoryUserProfileRepository) -> None:
+def test_update_changes_fields(repository: SqlAlchemyUserProfileRepository) -> None:
     register = RegisterUserProfile(repository)
     register.execute(
         RegisterUserProfileInput(
@@ -87,14 +93,14 @@ def test_update_changes_fields(repository: InMemoryUserProfileRepository) -> Non
     assert updated.macro_targets == MacroTargets(protein_g=110, fat_g=55, carbs_g=180)
 
 
-def test_update_missing_profile(repository: InMemoryUserProfileRepository) -> None:
+def test_update_missing_profile(repository: SqlAlchemyUserProfileRepository) -> None:
     update = UpdateUserProfile(repository)
 
     with pytest.raises(UseCaseError):
         update.execute(UpdateUserProfileInput(user_id="unknown", weight_kg=80))
 
 
-def test_get_profile(repository: InMemoryUserProfileRepository) -> None:
+def test_get_profile(repository: SqlAlchemyUserProfileRepository) -> None:
     register = RegisterUserProfile(repository)
     register.execute(
         RegisterUserProfileInput(
@@ -113,8 +119,10 @@ def test_get_profile(repository: InMemoryUserProfileRepository) -> None:
     assert profile.goal is Goal.GAIN_WEIGHT
 
 
-def test_get_profile_missing(repository: InMemoryUserProfileRepository) -> None:
+def test_get_profile_missing(repository: SqlAlchemyUserProfileRepository) -> None:
     get_profile = GetUserProfile(repository)
 
     with pytest.raises(UseCaseError):
         get_profile.execute("unknown")
+
+

@@ -86,3 +86,6 @@ def _ensure_non_negative(value: float, field_name: str) -> None:
     if value < 0:
         msg = f"{field_name} не может быть отрицательным"
         raise ValidationError(msg)
+
+
+

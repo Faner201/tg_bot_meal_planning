@@ -16,3 +16,6 @@ class Entity[EntityId]:
         if self.id is None:
             msg = "Идентификатор сущности обязателен"
             raise ValueError(msg)
+
+
+

@@ -4,3 +4,6 @@ class DomainError(Exception):
 
 class ValidationError(DomainError):
     """Ошибка бизнес-валидации."""
+
+
+

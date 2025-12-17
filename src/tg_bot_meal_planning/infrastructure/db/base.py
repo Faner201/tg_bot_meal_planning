@@ -7,3 +7,6 @@ class Base(DeclarativeBase):
     """Базовый DeclarativeBase для ORM."""
 
     pass
+
+
+

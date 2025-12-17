@@ -9,12 +9,6 @@ from tg_bot_meal_planning.domain.user_profile import Gender, Goal, MacroTargets,
 
 if TYPE_CHECKING:
     from tg_bot_meal_planning.application.repositories import UserProfileRepository
-else:  # pragma: no cover - только для аннотаций
-
-    class UserProfileRepository:  # noqa: D401
-        """Stub для рантайма."""
-
-        pass
 
 
 @dataclass(frozen=True)
@@ -95,3 +89,6 @@ class GetUserProfile(SyncUseCase[str, UserProfile]):
             msg = f"Профиль {data!r} не найден"
             raise UseCaseError(msg)
         return profile
+
+
+
