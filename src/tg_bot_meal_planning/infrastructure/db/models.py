@@ -1,6 +1,8 @@
 from __future__ import annotations
 
-from sqlalchemy import Float, String
+from datetime import datetime  # noqa: TC003
+
+from sqlalchemy import DateTime, Float, String
 from sqlalchemy.orm import Mapped, mapped_column
 
 from tg_bot_meal_planning.infrastructure.db.base import Base
@@ -17,6 +19,19 @@ class UserProfileModel(Base):
     macro_protein_g: Mapped[float | None] = mapped_column(Float, nullable=True)
     macro_fat_g: Mapped[float | None] = mapped_column(Float, nullable=True)
     macro_carbs_g: Mapped[float | None] = mapped_column(Float, nullable=True)
+
+
+class FoodEntryModel(Base):
+    __tablename__ = "food_entries"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    user_id: Mapped[str] = mapped_column(String, nullable=False, index=True)
+    title: Mapped[str] = mapped_column(String, nullable=False)
+    portion_grams: Mapped[float] = mapped_column(Float, nullable=False)
+    protein_per_100g: Mapped[float] = mapped_column(Float, nullable=False)
+    fat_per_100g: Mapped[float] = mapped_column(Float, nullable=False)
+    carbs_per_100g: Mapped[float] = mapped_column(Float, nullable=False)
+    taken_at_utc: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
 
 
 
