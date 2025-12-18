@@ -137,3 +137,4 @@ class FoodDiaryAggregator(DomainService[AggregateInput, MacroNutrients]):
             if data.start_utc <= entry.taken_at_utc < data.end_utc:
                 total = total.add(entry.actual_macros)
         return total
+

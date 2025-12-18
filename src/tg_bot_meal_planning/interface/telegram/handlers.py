@@ -11,6 +11,7 @@ from tg_bot_meal_planning.application.user_profile import (
 
 if TYPE_CHECKING:
     from tg_bot_meal_planning.application.use_case import UseCase
+    from tg_bot_meal_planning.domain.food_entry import MacroNutrients
     from tg_bot_meal_planning.domain.user_profile import Goal, MacroTargets, UserProfile
 
 Update = TypeVar("Update", contravariant=True)
@@ -114,7 +115,7 @@ def _format_profile(profile: UserProfile) -> str:
     )
 
 
-def _format_macro_targets(macro_targets: MacroTargets | None) -> str:
+def _format_macro_targets(macro_targets: MacroTargets | MacroNutrients | None) -> str:
     if macro_targets is None:
         return "не задано"
     return (

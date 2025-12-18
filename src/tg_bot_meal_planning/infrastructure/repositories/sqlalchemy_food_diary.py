@@ -73,3 +73,4 @@ class SqlAlchemyFoodDiaryRepository(FoodDiaryRepository):
             macros_per_100g=macros,
             taken_at_utc=taken_at,
         )
+

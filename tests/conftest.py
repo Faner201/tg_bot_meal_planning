@@ -21,9 +21,6 @@ if TYPE_CHECKING:
 
 @pytest.fixture
 def session_factory(tmp_path: Path) -> Iterator[sessionmaker[Session]]:
-    # Импорт моделей для регистрации таблиц в metadata
-    import tg_bot_meal_planning.infrastructure.db.models  # noqa: F401
-
     engine = create_engine(f"sqlite:///{tmp_path}/test.db", future=True)
     Base.metadata.create_all(engine)
     factory: sessionmaker[Session] = sessionmaker(engine, expire_on_commit=False, class_=Session)

@@ -11,17 +11,15 @@ dependencies = [
     "SQLAlchemy>=2.0.34",
     "alembic>=1.13.2",
     "pytest>=8.3.0",
-    "pytest-asyncio>=0.24.0",
     "aiogram>=3.13.1",
-    "typing_extensions>=4.12.2",
 ]
 
 [project.optional-dependencies]
 dev = [
     "pre-commit>=4.0.0",
     "ruff>=0.7.0",
-    "pytest-asyncio>=0.24.0",
     "ty==0.0.1a33",
+    "pytest-asyncio>=0.26.0",
 ]
 
 [tool.hatch.build.targets.wheel]

@@ -35,3 +35,4 @@ def upgrade() -> None:
 def downgrade() -> None:
     op.drop_index("ix_food_entries_user_period", table_name="food_entries")
     op.drop_table("food_entries")
+

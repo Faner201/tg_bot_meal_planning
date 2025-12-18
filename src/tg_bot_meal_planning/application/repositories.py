@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Protocol, Self
+from typing import TYPE_CHECKING, Protocol
 
 if TYPE_CHECKING:
     from datetime import datetime
@@ -9,20 +9,26 @@ if TYPE_CHECKING:
     from tg_bot_meal_planning.domain.user_profile import UserProfile
 
 
-class UserProfileRepository(Protocol):
-    """Контракт хранилища профилей пользователей."""
-
-    def get(self: Self, user_id: str) -> UserProfile | None: ...
-
-    def save(self: Self, profile: UserProfile) -> None: ...
-
-
 class FoodDiaryRepository(Protocol):
-    """Контракт хранилища записей дневника питания."""
+    """Интерфейс репозитория записей дневника питания."""
 
-    def add(self: Self, entry: FoodEntry) -> None: ...
+    def add(self, entry: FoodEntry) -> None:
+        ...
 
-    def list_entries(self: Self, user_id: str, start_utc: datetime, end_utc: datetime) -> list[FoodEntry]: ...
+    def list_entries(
+        self,
+        user_id: str,
+        start_utc: datetime,
+        end_utc: datetime,
+    ) -> list[FoodEntry]:
+        ...
 
 
+class UserProfileRepository(Protocol):
+    """Интерфейс репозитория профилей пользователей."""
 
+    def get(self, user_id: str) -> UserProfile | None:
+        ...
+
+    def save(self, profile: UserProfile) -> None:
+        ...

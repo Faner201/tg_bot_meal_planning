@@ -58,3 +58,4 @@ class CalculateCalories(SyncUseCase[CalculateCaloriesInput, CalorieCalculationRe
 
 
 
+

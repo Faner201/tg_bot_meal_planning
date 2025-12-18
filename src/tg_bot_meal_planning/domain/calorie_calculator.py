@@ -76,3 +76,4 @@ class MifflinStJeorCalculator(DomainService[CalorieCalculationInput, CalorieCalc
 
 
 
+

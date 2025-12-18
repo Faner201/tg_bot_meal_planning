@@ -104,3 +104,4 @@ def test_food_entry_requires_positive_values_and_utc() -> None:
             macros_per_100g=MacroNutrients(protein_g=1, fat_g=1, carbs_g=1),
             taken_at_utc=datetime(2025, 1, 1, 8, 0, tzinfo=UTC).astimezone(timezone(timedelta(hours=3))),
         )
+

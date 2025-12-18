@@ -138,3 +138,4 @@ def test_list_food_entries_requires_utc() -> None:
                 end_utc=datetime(2025, 1, 1, 0, 0, tzinfo=UTC),
             )
         )
+

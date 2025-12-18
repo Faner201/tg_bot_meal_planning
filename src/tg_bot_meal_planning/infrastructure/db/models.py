@@ -31,7 +31,4 @@ class FoodEntryModel(Base):
     protein_per_100g: Mapped[float] = mapped_column(Float, nullable=False)
     fat_per_100g: Mapped[float] = mapped_column(Float, nullable=False)
     carbs_per_100g: Mapped[float] = mapped_column(Float, nullable=False)
-    taken_at_utc: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
-
-
-
+    taken_at_utc: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)

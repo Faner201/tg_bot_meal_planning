@@ -132,3 +132,4 @@ def _ensure_datetime_awareness(value: datetime, field_name: str, *, must_be_utc:
         msg = f"{field_name} обязан быть в UTC"
         raise UseCaseError(msg)
 
+

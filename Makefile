@@ -1,5 +1,6 @@
 COMPOSE ?= docker compose
-DOCKER_APP ?= $(COMPOSE) run --rm app
+UV_LINK_MODE ?= copy
+DOCKER_APP ?= $(COMPOSE) run --rm -e UV_LINK_MODE=$(UV_LINK_MODE) app
 ENV_FILE ?= infra/.env
 ENV_EXAMPLE ?= infra/env.example
 APP_PORT ?= 8000
@@ -32,6 +33,8 @@ env:
 	fi
 
 install:
+	$(DOCKER_APP) rm -rf .venv
+	$(DOCKER_APP) uv venv
 	$(DOCKER_APP) uv pip install -e ".[dev]"
 
 package:
@@ -64,7 +67,7 @@ logs:
 	$(COMPOSE) logs -f app
 
 shell: env
-	$(COMPOSE) run --rm app /bin/bash
+	$(DOCKER_APP) /bin/bash
 
 test:
-	$(DOCKER_APP) uv run pytest
+	$(DOCKER_APP) uv run --extra dev pytest

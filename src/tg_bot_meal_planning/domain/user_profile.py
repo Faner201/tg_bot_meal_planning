@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from dataclasses import dataclass
-from enum import StrEnum
+from enum import Enum
 from typing import Self
 
 from tg_bot_meal_planning.domain.entities import Entity
@@ -9,12 +9,12 @@ from tg_bot_meal_planning.domain.errors import ValidationError
 from tg_bot_meal_planning.domain.value_objects import ValueObject
 
 
-class Gender(StrEnum):
+class Gender(str, Enum):
     MALE = "male"
     FEMALE = "female"
 
 
-class Goal(StrEnum):
+class Goal(str, Enum):
     LOSE_WEIGHT = "lose_weight"
     MAINTAIN_WEIGHT = "maintain_weight"
     GAIN_WEIGHT = "gain_weight"
@@ -86,6 +86,7 @@ def _ensure_non_negative(value: float, field_name: str) -> None:
     if value < 0:
         msg = f"{field_name} не может быть отрицательным"
         raise ValidationError(msg)
+
 
 
 

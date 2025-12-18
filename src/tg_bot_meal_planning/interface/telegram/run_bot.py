@@ -4,78 +4,97 @@ import asyncio
 import logging
 import os
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 from aiogram import Bot, Dispatcher
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session, sessionmaker
 
 from tg_bot_meal_planning.application.user_profile import (
     GetUserProfile,
     RegisterUserProfile,
     UpdateUserProfile,
 )
-from tg_bot_meal_planning.infrastructure.db import models as _models  # noqa: F401
 from tg_bot_meal_planning.infrastructure.db.base import Base
 from tg_bot_meal_planning.infrastructure.repositories.sqlalchemy_user_profile import (
     SqlAlchemyUserProfileRepository,
 )
-from tg_bot_meal_planning.interface.telegram.bot import BotDependencies, build_router
+from tg_bot_meal_planning.interface.telegram.bot import (
+    BarcodeLookupResult,
+    BotDependencies,
+    build_router,
+)
+
+if TYPE_CHECKING:
+    from tg_bot_meal_planning.domain.product import Barcode, Product
 
 
-def _build_session_factory(database_path: str) -> sessionmaker:
-    """Создать фабрику сессий SQLAlchemy и подготовить схему.
+def _create_session_factory(db_path: str) -> sessionmaker[Session]:
+    """Создаёт фабрику сессий и мигрирует базу, если нужно."""
+    path = Path(db_path)
+    path.parent.mkdir(parents=True, exist_ok=True)
 
-    Пытаемся использовать путь из env. Если файловая система недоступна (напр. read-only
-    при локальном запуске с путём вида /app/...), откатываемся на локальный var/sqlite.
-    """
-
-    db_path = Path(database_path)
-    try:
-        db_path.parent.mkdir(parents=True, exist_ok=True)
-    except OSError:
-        fallback = Path("var/sqlite/app.db")
-        fallback.parent.mkdir(parents=True, exist_ok=True)
-        db_path = fallback
-
-    engine = create_engine(f"sqlite:///{db_path}", echo=False, future=True)
+    engine = create_engine(f"sqlite:///{path}", future=True)
     Base.metadata.create_all(engine)
-    return sessionmaker(bind=engine, expire_on_commit=False)
+    return sessionmaker(engine, expire_on_commit=False, class_=Session)
 
 
-def _init_dependencies(database_path: str) -> BotDependencies:
-    session_factory = _build_session_factory(database_path)
-    repository = SqlAlchemyUserProfileRepository(session_factory=session_factory)
+class _AlwaysManualLookup:
+    """Временный заглушечный поиск по штрихкоду."""
 
+    def execute(self, data: Barcode) -> BarcodeLookupResult:
+        return BarcodeLookupResult(
+            product=None,
+            needs_manual_input=True,
+            reason="поиск по штрихкоду ещё не реализован",
+        )
+
+
+class _MemoryProductSaver:
+    """Простейшее in-memory сохранение продуктов."""
+
+    def __init__(self) -> None:
+        self._storage: dict[str, Product] = {}
+
+    def execute(self, data: Product) -> Product:
+        self._storage[data.id] = data
+        return data
+
+
+def _build_dependencies(session_factory: sessionmaker[Session]) -> BotDependencies:
+    profile_repo = SqlAlchemyUserProfileRepository(session_factory)
     return BotDependencies(
-        register_profile=RegisterUserProfile(repository),
-        update_profile=UpdateUserProfile(repository),
-        get_profile=GetUserProfile(repository),
+        register_profile=RegisterUserProfile(profile_repo),
+        update_profile=UpdateUserProfile(profile_repo),
+        get_profile=GetUserProfile(profile_repo),
+        lookup_product=_AlwaysManualLookup(),
+        save_manual_product=_MemoryProductSaver(),
     )
 
 
 async def main() -> None:
-    """Точка входа: инициализирует зависимости и запускает polling aiogram."""
+    logging.basicConfig(
+        level=os.getenv("LOG_LEVEL", "INFO"),
+        format="%(asctime)s %(levelname)s %(name)s %(message)s",
+    )
 
-    token = os.environ.get("TELEGRAM_BOT_TOKEN")
+    token = os.getenv("TELEGRAM_BOT_TOKEN")
     if not token:
-        raise RuntimeError("TELEGRAM_BOT_TOKEN is required")
+        raise SystemExit("TELEGRAM_BOT_TOKEN не задан")
 
-    # Для локального запуска по умолчанию кладём SQLite рядом с проектом.
-    database_path = os.environ.get("DATABASE_PATH", "var/sqlite/app.db")
+    db_path = os.getenv("DATABASE_PATH", "/app/var/sqlite/app.db")
+    session_factory = _create_session_factory(db_path)
 
-    deps = _init_dependencies(database_path)
-
-    dp = Dispatcher()
-    dp.include_router(build_router(deps))
+    deps = _build_dependencies(session_factory)
+    router = build_router(deps)
 
     bot = Bot(token=token)
+    dp = Dispatcher()
+    dp.include_router(router)
+
+    logging.info("Запускаем бота (db=%s)", db_path)
     await dp.start_polling(bot)
 
 
 if __name__ == "__main__":
-    logging.basicConfig(
-        level=os.environ.get("LOG_LEVEL", "INFO"),
-        format="%(asctime)s [%(levelname)s] %(name)s: %(message)s",
-    )
     asyncio.run(main())
-
