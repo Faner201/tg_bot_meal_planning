@@ -1,1 +1,15 @@
 .DS_Store
+__pycache__/
+.pytest_cache/
+.venv/
+.coverage
+dist/
+*.egg-info/
+htmlcov/
+.env
+.env.*
+infra/.env
+infra/.env.*
+var/
+docker-compose.override.yml
+uv.lock
