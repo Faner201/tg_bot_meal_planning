@@ -17,13 +17,15 @@
 ## Docker/Make
 - Создайте файл окружения: `make env` в директории infra.
 - Соберите и запустите стек: `make build && make up`.
-- Тесты: `make test`.
+- Тесты: `make test`. Быстрая проверка стиля/типов: `make qa`.
 - Остановить стек: `make down`; логи приложения: `make logs`.
 
 ## Запуск Telegram-бота
-- Заполните `infra/.env` (см. `infra/env.example`), обязательно задайте `TELEGRAM_BOT_TOKEN`, опционально `DATABASE_PATH` (по умолчанию `var/sqlite/app.db`).
+- Заполните `infra/.env` (см. `infra/env.example`), обязательно задайте `TELEGRAM_BOT_TOKEN`, опционально `DATABASE_PATH` (по умолчанию `var/sqlite/app.db`), `PHOTO_STORAGE_DIR` (по умолчанию `var/photos`).
 - Через Docker: `make run` — запустит сервис `app` из `docker-compose` (бот `aiogram`, SQLite в томе `sqlite_data`).
 - Также можно поднять весь стек: `make build && make up`.
+- Бот умеет принимать фото со штрихкодом: изображение сохраняется локально, штрихкод распознаётся и путь до фото записывается в БД. Ответ показывает найденный товар и путь к сохранённому файлу.
+- Системная зависимость: для распознавания нужен `libzbar` (в Docker уже добавлен `libzbar0`; на хосте установите аналогичный пакет).
 
 ## CI
 Стартовый workflow устанавливает uv и выполняет pytest; по мере развития будут добавлены линтеры и типизация.

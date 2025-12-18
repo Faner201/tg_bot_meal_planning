@@ -74,3 +74,5 @@ class SqlAlchemyFoodDiaryRepository(FoodDiaryRepository):
             taken_at_utc=taken_at,
         )
 
+
+

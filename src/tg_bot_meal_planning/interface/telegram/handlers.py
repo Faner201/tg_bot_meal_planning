@@ -8,11 +8,12 @@ from tg_bot_meal_planning.application.user_profile import (
     UpdateUserProfile,
     UpdateUserProfileInput,
 )
+from tg_bot_meal_planning.domain.user_profile import Gender, Goal, UserProfile
 
 if TYPE_CHECKING:
     from tg_bot_meal_planning.application.use_case import UseCase
     from tg_bot_meal_planning.domain.food_entry import MacroNutrients
-    from tg_bot_meal_planning.domain.user_profile import Goal, MacroTargets, UserProfile
+    from tg_bot_meal_planning.domain.user_profile import MacroTargets
 
 Update = TypeVar("Update", contravariant=True)
 Response = TypeVar("Response", covariant=True)
@@ -97,7 +98,7 @@ class UpdateWeightHandler(Handler[UpdateWeightRequest, UpdateWeightResponse]):
         )
         text_lines = [
             f"Вес обновлён: {profile.weight_kg:.1f} кг",
-            f"Текущая цель: {profile.goal.value}",
+            f"Текущая цель: {_goal_label(profile.goal)}",
             f"БЖУ: {_format_macro_targets(profile.macro_targets)}",
         ]
         return UpdateWeightResponse(profile=profile, text="\n".join(text_lines))
@@ -109,8 +110,8 @@ def _format_profile(profile: UserProfile) -> str:
         "Профиль пользователя:\n"
         f"- Рост: {profile.height_cm:.0f} см\n"
         f"- Вес: {profile.weight_kg:.1f} кг\n"
-        f"- Пол: {profile.gender.value}\n"
-        f"- Цель: {profile.goal.value}\n"
+        f"- Пол: {_gender_label(profile.gender)}\n"
+        f"- Цель: {_goal_label(profile.goal)}\n"
         f"- БЖУ: {macro_targets}"
     )
 
@@ -123,3 +124,20 @@ def _format_macro_targets(macro_targets: MacroTargets | MacroNutrients | None) -
         f"{macro_targets.fat_g:.0f}/"
         f"{macro_targets.carbs_g:.0f} г"
     )
+
+
+def _goal_label(goal: Goal) -> str:
+    return {
+        Goal.LOSE_WEIGHT: "похудение",
+        Goal.MAINTAIN_WEIGHT: "поддержание",
+        Goal.GAIN_WEIGHT: "набор",
+    }[goal]
+
+
+def _gender_label(gender: Gender) -> str:
+    return {
+        Gender.MALE: "мужской",
+        Gender.FEMALE: "женский",
+    }[gender]
+
+

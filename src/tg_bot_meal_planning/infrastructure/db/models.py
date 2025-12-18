@@ -32,3 +32,15 @@ class FoodEntryModel(Base):
     fat_per_100g: Mapped[float] = mapped_column(Float, nullable=False)
     carbs_per_100g: Mapped[float] = mapped_column(Float, nullable=False)
     taken_at_utc: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False)
+
+
+class ScannedBarcodeModel(Base):
+    __tablename__ = "scanned_barcodes"
+
+    id: Mapped[str] = mapped_column(String, primary_key=True)
+    user_id: Mapped[str] = mapped_column(String, nullable=False, index=True)
+    barcode: Mapped[str] = mapped_column(String, nullable=False, index=True)
+    photo_path: Mapped[str] = mapped_column(String, nullable=False)
+    scanned_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), nullable=False, index=True)
+
+

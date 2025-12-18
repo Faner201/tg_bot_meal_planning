@@ -36,3 +36,5 @@ def test_sqlalchemy_food_diary_repository_persists_and_lists(
     assert loaded.taken_at_utc == entry.taken_at_utc
     assert loaded.actual_macros.protein_g == entry.actual_macros.protein_g
 
+
+

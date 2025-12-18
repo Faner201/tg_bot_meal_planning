@@ -105,3 +105,5 @@ def test_food_entry_requires_positive_values_and_utc() -> None:
             taken_at_utc=datetime(2025, 1, 1, 8, 0, tzinfo=UTC).astimezone(timezone(timedelta(hours=3))),
         )
 
+
+

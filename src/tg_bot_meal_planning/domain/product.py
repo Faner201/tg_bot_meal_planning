@@ -38,3 +38,5 @@ class Product(Entity[str]):
         if self.portion_grams <= 0:
             msg = "portion_grams должен быть положительным значением"
             raise ValueError(msg)
+
+

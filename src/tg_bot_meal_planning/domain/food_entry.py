@@ -138,3 +138,5 @@ class FoodDiaryAggregator(DomainService[AggregateInput, MacroNutrients]):
                 total = total.add(entry.actual_macros)
         return total
 
+
+

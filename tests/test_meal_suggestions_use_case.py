@@ -68,3 +68,5 @@ def test_invalid_meal_shares_are_rejected() -> None:
 
     with pytest.raises(UseCaseError):
         SuggestDailyPlan(config=config)
+
+

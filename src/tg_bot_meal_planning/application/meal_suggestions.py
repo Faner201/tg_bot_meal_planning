@@ -201,3 +201,5 @@ class SuggestDailyPlan(SyncUseCase[SuggestDailyPlanInput, MealSuggestionResult])
             )
             meals.append(MealPortion(name=name, share=share, macros=meal_macros))
         return meals
+
+

@@ -49,7 +49,7 @@ def test_get_profile_handler_formats_profile_text(
     assert response.profile.id == "user-1"
     assert "Рост: 180" in response.text
     assert "Вес: 80.0 кг" in response.text
-    assert "Пол: male" in response.text
+    assert "Пол: мужской" in response.text
     assert "БЖУ: 120/60/200 г" in response.text
 
 
@@ -69,4 +69,4 @@ def test_update_weight_handler_updates_repository(
     assert stored.weight_kg == pytest.approx(72.5)
     assert stored.goal is Goal.MAINTAIN_WEIGHT
     assert "Вес обновлён: 72.5 кг" in response.text
-    assert "Текущая цель: maintain_weight" in response.text
+    assert "Текущая цель: поддержание" in response.text

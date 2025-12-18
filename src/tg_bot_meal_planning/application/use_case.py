@@ -23,3 +23,5 @@ class SyncUseCase[Input, Output]:
 
 
 
+
+

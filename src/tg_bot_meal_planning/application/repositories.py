@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING, Protocol
 if TYPE_CHECKING:
     from datetime import datetime
 
+    from tg_bot_meal_planning.domain.barcode_scan import ScannedBarcode
     from tg_bot_meal_planning.domain.food_entry import FoodEntry
     from tg_bot_meal_planning.domain.user_profile import UserProfile
 
@@ -32,3 +33,12 @@ class UserProfileRepository(Protocol):
 
     def save(self, profile: UserProfile) -> None:
         ...
+
+
+class ScannedBarcodeRepository(Protocol):
+    """Интерфейс репозитория сохранённых штрихкодов и фото."""
+
+    def save(self, scan: ScannedBarcode) -> None:
+        ...
+
+

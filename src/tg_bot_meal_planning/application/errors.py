@@ -7,3 +7,5 @@ class UseCaseError(DomainError):
 
 
 
+
+
